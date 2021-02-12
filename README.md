@@ -6,4 +6,3 @@ multimodule android project
 - dagger
 - room
 - android.arch.lifecycle
-- 
