@@ -6,8 +6,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fsm.R
 import com.example.fsm.databinding.ItemGenderBinding
-import com.example.base.data.model.Gender
 import com.example.fsm.ui.viewHolders.GenderViewHolder
+import com.example.shared.Gender
 
 class GenderListAdapter() : RecyclerView.Adapter<GenderViewHolder>() {
     private lateinit var postList:List<Gender>

@@ -1,3 +1,6 @@
+include ':shared'
+include ':core'
+include ':network'
 include ':fsm'
 include ':app'
 include ':base'

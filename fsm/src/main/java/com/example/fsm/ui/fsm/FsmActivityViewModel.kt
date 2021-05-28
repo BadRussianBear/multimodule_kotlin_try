@@ -4,16 +4,16 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.fsm.R
-import com.example.fsm.base.BaseViewModel
 import com.example.fsm.utils.checkItemsAre
-import com.example.base.data.dao.GenderDao
-import com.example.base.data.model.Gender
+import com.example.base.data.dao.BaseDao
 import io.reactivex.disposables.Disposable
 import com.example.fsm.utils.longWork
+import com.example.network.data.ApiService
+import com.example.shared.Gender
 import javax.inject.Inject
 
 class FsmActivityViewModel  @Inject
-constructor(private val postDao: GenderDao): ViewModel(){
+constructor(private val postDao: BaseDao, private val networkApi: ApiService): ViewModel(){
 
     val postListAdapter: GenderListAdapter = GenderListAdapter()
     val loadingVisibility: MutableLiveData<Int> = MutableLiveData()
@@ -21,9 +21,9 @@ constructor(private val postDao: GenderDao): ViewModel(){
 
     private lateinit var subscription: Disposable
 
-    init{
-        loadPosts()
-    }
+//    init{
+//        callGetGenders()
+//    }
 
     override fun onCleared() {
         super.onCleared()
@@ -44,17 +44,33 @@ constructor(private val postDao: GenderDao): ViewModel(){
         errorMessage.value = null
     }
 
-    fun onRetrievePostListFinish(){
+    private fun onRetrievePostListFinish(){
         loadingVisibility.value = View.GONE
     }
 
-    fun onRetrievePostListSuccess(postList:List<Any>){
+    private fun onRetrievePostListSuccess(postList:List<Any>){
         val list = postList.checkItemsAre<Gender>()
-        if(list != null)
+        if(!list.isNullOrEmpty()){
             postListAdapter.updatePostList(list)
+        }
+
+//        if (postList.all { it is Gender } ){
+//            val a: List<Gender> = postList.filterIsInstance<Gender>()
+//            postListAdapter.updatePostList(postList.filterIsInstance<Gender>())
+//        }
     }
 
     private fun onRetrievePostListError(error: Throwable){
         errorMessage.value = R.string.app_name
+    }
+
+    fun callGetGenders(){
+        longWork(
+            { networkApi.getUser() },
+            { onRetrievePostListStart()},
+            { onRetrievePostListFinish()},
+            {list -> onRetrievePostListSuccess(list)},
+            { error -> onRetrievePostListError(error)});
+
     }
 }

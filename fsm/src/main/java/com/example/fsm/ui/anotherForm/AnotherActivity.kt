@@ -7,7 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.base.data.DataBase
-import com.example.base.data.dao.GenderDao
+import com.example.base.data.dao.BaseDao
 import com.example.fsm.R
 import com.example.fsm.ViewModelFactory
 import com.example.fsm.databinding.AnotherMainBinding
@@ -29,17 +29,24 @@ class AnotherActivity : AppCompatActivity() {
     lateinit var dataBase: DataBase
 
     @Inject
-    lateinit var genderDao: GenderDao
+    lateinit var baseDao: BaseDao
 
     override fun onCreate(savedInstanceState: Bundle?){
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setBindings()
-
+        observeResponseData();
         binding.postList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         viewModel.errorMessage.observe(this, {
                 errorMessage -> if(errorMessage != null) showError(errorMessage) else hideError()
         })
+    }
+
+    private fun observeResponseData() {
+        viewModel.callGetGenders();
+//        viewModel.onRetrievePostListSuccess.observe(this, Observer { data ->
+//            // here will be your response
+//        })
     }
 
     private fun setBindings(){

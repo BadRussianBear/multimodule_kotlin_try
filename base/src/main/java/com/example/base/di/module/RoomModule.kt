@@ -5,8 +5,8 @@ import androidx.annotation.NonNull
 import androidx.room.Room
 import androidx.room.migration.Migration
 import com.example.base.data.DataBase
-import com.example.base.data.dao.GenderDao
-import com.example.base.data.dao.GenderDataSource
+import com.example.base.data.dao.BaseDao
+import com.example.base.data.dao.BaseDataSource
 import com.example.base.utils.MIGRATION_130_2
 import dagger.Module
 import dagger.Provides
@@ -34,14 +34,14 @@ open class RoomModule() {
 
     @Singleton
     @Provides
-    fun provideGenderDao(database: DataBase): GenderDao {
+    fun provideGenderDao(database: DataBase): BaseDao {
         return database.genderDao()
     }
 
     @Singleton
     @Provides
-    fun provideGenderDataSource(genderDao: GenderDao): GenderDataSource {
-        return GenderDataSource(genderDao)
+    fun provideGenderDataSource(baseDao: BaseDao): BaseDataSource {
+        return BaseDataSource(baseDao)
     }
 //    init {
 //        demoDatabase =

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -17,9 +18,9 @@ fun longWork(
 ) {
     Observable.fromCallable { caller() }
     .concatMap {
-            dbPostList ->
-            Thread.sleep(10000)
-            Observable.just(dbPostList)
+        dbPostList ->
+        Thread.sleep(3000)
+        Observable.just(dbPostList)
     }
     .subscribeOn(Schedulers.io())
     .observeOn(AndroidSchedulers.mainThread())
@@ -35,6 +36,13 @@ fun longWork(
 fun Context.toast(message: String){
     Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
 }
+
+@Suppress("UNCHECKED_CAST")
+inline fun <reified T : Any> List<*>.checkItemsAre1() =
+    if (all { it is T })
+        this as T
+    else null
+
 
 @Suppress("UNCHECKED_CAST")
 inline fun <reified T : Any> List<*>.checkItemsAre() =

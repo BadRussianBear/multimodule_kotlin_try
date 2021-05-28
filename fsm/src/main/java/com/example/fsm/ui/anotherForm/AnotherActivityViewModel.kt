@@ -5,14 +5,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.fsm.R
 import com.example.fsm.utils.checkItemsAre
-import com.example.base.data.dao.GenderDao
-import com.example.base.data.model.Gender
+import com.example.base.data.dao.BaseDao
 import io.reactivex.disposables.Disposable
 import com.example.fsm.utils.longWork
+import com.example.network.data.ApiService
+import com.example.shared.Gender
 import javax.inject.Inject
 
 class AnotherActivityViewModel  @Inject
-constructor (private val postDao: GenderDao): ViewModel(){
+constructor (private val postDao: BaseDao, private val networkApi: ApiService): ViewModel(){
     val postListAdapter: AnotherListAdapter = AnotherListAdapter()
     val loadingVisibility: MutableLiveData<Int> = MutableLiveData()
     val errorMessage:MutableLiveData<Int> = MutableLiveData()
@@ -37,19 +38,30 @@ constructor (private val postDao: GenderDao): ViewModel(){
             { error -> onRetrievePostListError(error)});
     }
 
-    fun onRetrievePostListStart(){
+    private fun onRetrievePostListStart(){
         loadingVisibility.value = View.VISIBLE
         errorMessage.value = null
     }
 
-    fun onRetrievePostListFinish(){
+    private fun onRetrievePostListFinish(){
         loadingVisibility.value = View.GONE
     }
 
-    fun onRetrievePostListSuccess(postList:List<Any>){
+    private fun onRetrievePostListSuccess(postList:List<Any>){
         val list = postList.checkItemsAre<Gender>()
         if(list != null)
             postListAdapter.updatePostList(list)
+    }
+
+    fun callGetGenders(){
+        longWork(
+            { postDao.getGenders() },
+            { onRetrievePostListStart()},
+            { onRetrievePostListFinish()},
+            {list -> onRetrievePostListSuccess(list)},
+            { error -> onRetrievePostListError(error)});
+//        postDao.getGenders();
+//        myRepository.callMyRetrofitApi(liveData)
     }
 
     private fun onRetrievePostListError(error: Throwable){

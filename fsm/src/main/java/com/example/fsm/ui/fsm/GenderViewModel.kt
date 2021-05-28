@@ -2,7 +2,7 @@ package com.example.fsm.ui.fsm
 
 import androidx.lifecycle.MutableLiveData
 import com.example.fsm.base.BaseViewModel
-import com.example.base.data.model.Gender
+import com.example.shared.Gender
 
 class GenderViewModel: BaseViewModel() {
     private val postTitle = MutableLiveData<String>()

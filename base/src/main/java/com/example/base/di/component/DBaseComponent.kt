@@ -7,7 +7,7 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [RoomModule::class])
-interface BaseComponent {
+interface DBaseComponent {
 
     fun inject(app: Application)
 }

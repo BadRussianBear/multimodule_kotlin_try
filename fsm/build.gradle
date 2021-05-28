@@ -31,6 +31,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation 'com.google.dagger:dagger:2.29.1'
+    implementation project(path: ':shared')
     kapt "com.google.dagger:dagger-compiler:2.27"
 
     implementation 'com.google.dagger:dagger-android:2.24'
@@ -54,6 +55,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation project(path: ':base')
+    implementation project(path: ':network')
     implementation project(path: ':feature-two')
     implementation project(path: ':feature-one')
     testImplementation 'junit:junit:4.12'

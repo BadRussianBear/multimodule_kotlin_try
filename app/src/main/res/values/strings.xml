@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Dagger-Multi-Module-Android-Example</string>
+    <string name="title_dynamicfeature">network</string>
+    <string name="title_network">network</string>
 </resources>
